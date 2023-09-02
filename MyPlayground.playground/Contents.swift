@@ -37,8 +37,13 @@ struct Car: Vehicle, EnvironmentalFriendly {
         print("Starting the \(model)!")
     }
     
-    func stop() {
-        print("Stopping the \(model)!")
+    func stop() async {
+        do {
+            try await Task.sleep(nanoseconds: 2_000_000_000)
+            print("Stopping the \(model)!")
+        } catch {
+            print("An error occurred: \(error)")
+        }
     }
 }
 
@@ -93,4 +98,13 @@ print()
 print("Not Environmental Friendly Cars")
 for car in notEnvironmentalFriendlyVehicles {
     print("Model: \(car.model), FuelType: \(car.fuelType.rawValue)")
+}
+
+func main() async {
+    car1.start()
+    await car1.stop()
+}
+
+Task {
+    await main()
 }
